@@ -25,20 +25,21 @@ For Composter, foyer is an int.
 There is no atttribut for RecyclingGlass, RecyclingMetals and SortingCenter.
 I made the UML with the sortingCenter.
 
-Temps passé :
+Spend time :
 I done it in 2h30, 1h45 for the graphic and 0h45 for explain.
 
-Problemes rencontrés :
-Au depart de l'exercice, j'ai voulu trop simplifier en imaginant par exemple que le compostage était une sorte de recyclage. 
-Donc pas besoin de faire une class particuliere. Et tous les élément présent dans le JSON sont incinérables donc j'implément incineration sur waste. 
+encountered problem :
+At the start of the exercise, I wanted to simplify too much by imagining for example that composting was a kind of recycling.
+So no need to make a particular class. And all the elements present in the JSON are incinerable so I implement incineration on waste.
 
-J'ai juste oublié de me poser un type de question : Et si on ajoute ça ? Si on crée un nouveau moyen de traiter les dechets ? Si on crée un nouveau dechet ?, Si un nouveau déchets n'est pas incinérable ? ....
-Et comment assigner une quantité de CO2 dégagé en fonction du traitement à chaque dechets ? 
+I just forgot to ask myself a type of question: What if we add that? What if we create a new way to deal with waste? If we create a new waste?, If a new waste is not incinerable? ....
+And how to assign a quantity of CO2 released according to the treatment for each waste?
 
-De cette manière, je peux envoyer un dechet dans une nouvelle filiare en lui assignant une nouvelle quantité de CO2 degagé. Je peux additionner le poids de chaque déchets pour savoir si le service peut le supporter.
+In this way, I can send a waste to a new branch by assigning a new amount of released CO2 to it. I can add the weight of each waste to find out if the service can support it.
 
-Je pense que maintenant, je peux ajouter ou enlever n'importe quel éléments du diagramme sans devoir modifier sa structure. 
-Mon UML donc le code qui en decoulera est S.O.L.I.D.
+I think now I can add or remove any element of the diagram without having to modify its structure.
+My UML so the resulting code is S.O.L.I.D.
+
 
 
 
