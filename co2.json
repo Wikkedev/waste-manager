@@ -1,0 +1,13 @@
+{
+    "plastiques": {
+        "PET":   { "incineration": 40, "recyclage": 8 },
+        "PVC":   { "incineration": 38, "recyclage": 12 },
+        "PC":    { "incineration": 42, "recyclage": 10 },
+        "PEHD":  { "incineration": 35, "recyclage": 11 }
+    },
+    "Carton":    { "incineration": 25, "recyclage": 5 },
+    "Organique": { "incineration": 28, "compostage": 1 },
+    "Verre":     { "incineration": 50, "recyclage": 6 },
+    "Metaux":    { "incineration": 50, "recyclage": 7 },
+    "Autre":     { "incineration": 30 }
+}
