@@ -3,10 +3,10 @@ collect and treat waste
 
 Diagram UML 
 
-The Waste class is to set weight, co2 and district attribut for all subClasses.
+The abstract class Waste is to set weight, co2 and district attribut for all subClasses.
 Weight, co2 arer int and district is an array. Whith district attribute, i can know where Waste comes from.
 
-I made a class for all the categories of waste and a subclass for the way in which it is treated.
+I made a class for all the categories of waste and a subclass for the way in which it is treated. (plastic is an abstract class)
 Like that, if there is a another way to treat waste, i can add a new class for it without editing any class.
 I think (and i hope) it is S.O.L.I.D.
 you can see that all classes have an incineration interface. 
