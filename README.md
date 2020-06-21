@@ -27,8 +27,9 @@ I made the UML with the sortingCenter.
 
 Spend time :
 I done it in 2h30, 1h45 for the graphic and 0h45 for explain.
+it took me half an hour to create the file tree.
 
-encountered problem :
+Encountered problem :
 At the start of the exercise, I wanted to simplify too much by imagining for example that composting was a kind of recycling.
 So no need to make a particular class. And all the elements present in the JSON are incinerable so I implement incineration on waste.
 
@@ -39,6 +40,9 @@ In this way, I can send a waste to a new branch by assigning a new amount of rel
 
 I think now I can add or remove any element of the diagram without having to modify its structure.
 My UML so the resulting code is S.O.L.I.D.
+
+At this time (Sunday 23:00), I have to write the code in the files, create the class with their attributes, their methods, their extends, their implementations, the interfaces, the getter.
+But above all the index.php file to display the requested results.
 
 
 
