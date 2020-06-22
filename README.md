@@ -44,6 +44,14 @@ My UML so the resulting code is S.O.L.I.D.
 At this time (Sunday 23:00), I have to write the code in the files, create the class with their attributes, their methods, their extends, their implementations, the interfaces, the getter.
 But above all the index.php file to display the requested results.
 
-
-
+------------------------------------------------
+Lundi 23/06 
+J'ai corrigé certaines information de l'UML au fur et à mesure des besoins et des oublies. Mais je n'est pas changé sa structure.
+Je recupere les capacités de traitement de chaque  service en verifiant si ce service existe pour ne pas l'instancier pour rien.
+Je recupere par quartier (pour afficher le résultat de la répartition des déchets) pour chaque dechet son nom, son tonnage, le CO2 regeté en fonction du mode de traitement. J'additionne le tout pour la quantité total du dechet. 
+Je vais passer cette quantité total à la moulinette en commencant par recycler puis incinérer ce qui reste. Je recuperer la quantité de CO2 regeté en fonction de chaque traitement pour chaque dechet.
+J'avance en corrigeant les erreurs que produit mon code qui s'affiche dans la console. Je cherche des solutions dans oop-project-management ou sur internet. 
+C'est plus une question de technique et de manque de connaissance en POO car je comprend le principe (c'est bien).
+J'en suis là. J'y ai passé 6 heures.
+j'upload mes fichiers.
 
