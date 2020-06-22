@@ -16,9 +16,9 @@ To see if my way of doing is S.O.L.I.D., i add a new class (in grey) for Pvc cal
 It works.
 If it is necessary, i can add new subclasses for paper like white or colored without editing paper class. 
 
-For Services with an attribut Capacity(int), I made SubClasses for all services with their respective attributes. 
+For Services with an attribut Nom(string), I made SubClasses for all services with their respective attributes. 
 Capacity attribute is to compare with weight attribute of waste to find out if we can treat it (with addition of waste).
-For incinerator, ligneFour is an int. 
+For incinerator, ligneFour is an int and capaciteLigne is int. 
 For RecyclingPlastic, plastic atribute is an array. I can instanciate many recyclingPlastic with some value presented in the array. 
 I have just to add value in my array when ther is a new one and choose one of them when i instanciate.
 For Composter, foyer is an int.
