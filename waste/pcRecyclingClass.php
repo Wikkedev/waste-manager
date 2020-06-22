@@ -1,1 +1,6 @@
 <?php
+
+abstract class pcRecyclingClass
+{
+  
+}
