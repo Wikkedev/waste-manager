@@ -43,4 +43,6 @@ abstract class wasteAbstractClass
     {
         return $this->district;
     }
+  
+    
 }
