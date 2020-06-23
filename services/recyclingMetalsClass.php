@@ -18,4 +18,10 @@ class recyclingMetalsClass extends servicesAbstractClass
     {
         return $this->capacite;
     }
+  
+    public function recyclingTreatment($co2, $weight)
+    {
+        return $co2*$weight;
+    }
 }
+

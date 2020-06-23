@@ -16,6 +16,11 @@ class incineratorClass extends servicesAbstractClass
         $this->ligneFour = $ligneFour;
     }
 
+    public function getType()
+    {
+        return $this->type;
+    } 
+  
     public function getCapacite()
     {
         return $this->capaciteLigne * $this->ligneFour;

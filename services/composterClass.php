@@ -18,11 +18,17 @@ class composterClass extends servicesAbstractClass
 
     public function getCapacite()
     {
-        return $this->capacite;
+        return $this->capacite * $this->foyers;
     }
 
     public function getFoyers()
     {
         return $this->foyers;
     }
+  
+    public function compostingTreatment($co2, $weight)
+    {
+        return $co2*$weight;
+    }
+    
 }
