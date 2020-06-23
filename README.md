@@ -60,3 +60,58 @@ Mardi 24/06
 Je travail depuis ce matin sur l'application et je commence à avoir un résultat. 
 Mais je me rend compte que je n'est pa pris en compte le fait qu'il y ai 3 incinérateurs. J'ai fait comme s'il n'y en avait qu'un.
 Dans ma logique, je dois vérifier la quantité de dechets à incinérer et voir si le premier incinérateur peut la traiter. Si non, il faut que j'envoie le reste au deuxieme puis au troisieme.
+
+22h22 -> apres recherche sur internet, je viens de decider qu'un foyers était une unité de compostage ayant une certaine capacité. (capacité x foyer)
+Les capacités de traitement des composteurs sont trés petites par rapport à la totalité des dechets organiques à traiter. Je decide que tous les composteurs ne forme qu'une seule capacité.
+
+ce soir, j'arrive à produire ce resultat :
+
+PET -- est un nouveau type de déchet. Il faut l'ajouter au programme de traitement. Contactez votre CDA préféré.
+PVC -- est un nouveau type de déchet. Il faut l'ajouter au programme de traitement. Contactez votre CDA préféré.
+PC -- est un nouveau type de déchet. Il faut l'ajouter au programme de traitement. Contactez votre CDA préféré.
+PEHD -- est un nouveau type de déchet. Il faut l'ajouter au programme de traitement. Contactez votre CDA préféré.
+_________________________________________________________________________________________________
+Quantite total de papier a traiter : 66941.8 Tonnes
+Le centre de tri d'une capacité de 73922 tonnes peut traiter la totalité du papier.
+Mais la filiaire de traitement du papier d'une capacité de 36961 tonnes ne peut pas.
+29980.8 tonnes de papier vont directement être envoyés à l'incinérateur.
+Le recyclage de 36961 tonnes de papier a produit 184805 grammes de CO2.
+L'incinération de 29980.8 tonnes de papier dans l'incinérateur 1 a produit 749520 grammes de CO2.
+Le traitement de 66941.8 tonnes de papier a produit 934325 grammes de CO2 toutes filiaires de traitement confondues.
+_________________________________________________________________________________________________
+_________________________________________________________________________________________________
+Quantite total de dechets organiques a traiter : 98060.31 Tonnes
+Le centre de tri ne peut traiter que 73922 tonnes de dechets organiques. Le reste (24138.31 tonnes) va être incinéré.
+Le compostage de 73922 tonnes de dechets organiques a produit 73922 grammes de CO2.
+L'incinération de 24138.31 tonnes de dechets organiques dans l'incinérateur 1 a produit 675872.68 grammes de CO2.
+Le traitement de 98060.31 tonnes de dechets organiques a produit 749794.68 grammes de CO2 toutes filiaires de traitement confondues.
+_________________________________________________________________________________________________
+_________________________________________________________________________________________________
+Quantite total de verre a traiter : 42011.45 Tonnes
+Le centre de tri d'une capacité de 73922 tonnes peut traiter la totalité du verre.
+Mais la filiaire de traitement du verre d'une capacité de 20791 tonnes ne peut pas.
+21220.45 tonnes de verre vont directement être envoyés à l'incinérateur.
+Le recyclage de 20791 tonnes de verre a produit 124746 grammes de CO2.
+L'incinération de 21220.45 tonnes de verre dans l'incinérateur 1 a produit 1061022.5 grammes de CO2.
+Le traitement de 42011.45 tonnes de verre a produit 1185768.5 grammes de CO2 toutes filiaires de traitement confondues.
+_________________________________________________________________________________________________
+_________________________________________________________________________________________________
+Quantite total de metaux a traiter : 10054.33 Tonnes
+Le centre de tri d'une capacité de 73922 tonnes peut traiter la totalité des metaux.
+la filiaire de recyclage des metaux peut traiter tout les metaux.
+Le recyclage des metaux a produit 70380.31 grammes de CO2.
+Le traitement de 10054.33 tonnes de metaux a produit 70380.31 grammes de CO2 toutes filiaires de traitement confondues.
+_________________________________________________________________________________________________
+_________________________________________________________________________________________________
+Quantite total de dechets divers (autre) a traiter : 687825.49 Tonnes.
+Le centre de tri ne traite aucun de ces dechets divers (autre). Tout (687825.49 tonnes) va être incinéré.
+L'incinération de 665300 tonnes de dechets divers (autre) dans l'incinérateur 1 a produit 19959000 grammes de CO2.
+L'incinération de 22525.49 tonnes de dechets divers (autre) dans l'incinérateur 2 a produit 675764.7 grammes de CO2.
+Le traitement de 687825.49 tonnes de dechets divers (autre) a produit 20634764.7 grammes de CO2 toutes filiaires de traitement confondues.
+_________________________________________________________________________________________________
+
+Je dois encore travailler sur le fichiers organique.php car les resultats ne sont pas complets.
+Je vais faire un tableau recapitulatif du CO2 produit par recyclage, compostage et incineration.
+
+J'ai une question sur les methodes de treatment (incineratorTreatment, recyclingTreatment et compostingTreatment) que je suis obligé de les mmettre dans les class waste et les class services. Si je ne fais pas ça, php retourne une erreur.
+
