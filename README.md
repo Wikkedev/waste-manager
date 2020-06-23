@@ -55,3 +55,8 @@ C'est plus une question de technique et de manque de connaissance en POO car je 
 J'en suis là. J'y ai passé 6 heures.
 j'upload mes fichiers.
 
+--------------------------------------------------
+Mardi 24/06
+Je travail depuis ce matin sur l'application et je commence à avoir un résultat. 
+Mais je me rend compte que je n'est pa pris en compte le fait qu'il y ai 3 incinérateurs. J'ai fait comme s'il n'y en avait qu'un.
+Dans ma logique, je dois vérifier la quantité de dechets à incinérer et voir si le premier incinérateur peut la traiter. Si non, il faut que j'envoie le reste au deuxieme puis au troisieme.
