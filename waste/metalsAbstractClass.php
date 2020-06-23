@@ -1,6 +1,7 @@
 <?php
+namespace App\waste;
 
-abstract class metalsAbstractClass
+abstract class metalsAbstractClass extends wasteAbstractClass
 {
   
 }

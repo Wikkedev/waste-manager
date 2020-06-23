@@ -1,6 +1,11 @@
 <?php
+namespace App\waste;
 
-abstract class paperIncinerationClass
+use App\treatment\incineratorInterface;
+
+class paperIncinerationClass extends paperAbstractClass implements incineratorInterface
 {
-  
+    public function incineratorTreatment()
+    {
+    }
 }

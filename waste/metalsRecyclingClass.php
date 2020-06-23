@@ -1,6 +1,12 @@
 <?php
+namespace App\waste;
 
-abstract class metalsRecyclingClass
+use App\treatment\recyclingInterface;
+
+class metalsRecyclingClass extends glassAbstractClass implements recyclingInterface
 {
-  
+    public function recyclingTreatment()
+    {
+    }
 }
+

@@ -1,6 +1,11 @@
-<?php
+<?php 
+namespace App\waste;
 
-abstract class organicIncinerationClass
+use App\treatment\incineratorInterface;
+
+class organicIncinerationClass extends organicAbstractClass implements incineratorInterface
 {
-  
+    public function incineratorTreatment()
+    {
+    }
 }
