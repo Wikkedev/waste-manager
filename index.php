@@ -71,11 +71,11 @@ Si les dechets ne peuvent pas être recyclés ni incinérés car les capacités 
 */
 // tableau des services : l'idée serait de verifier si une class existe pour chaque services. Si des nouveaux services sont ajoutés au fichier json, le programme renvoie un message.
 include_once('services/arrayServices.php');
-var_dump($arrayServices);
+//var_dump($arrayServices);
 
 // tableau des dechets : même idée
 include_once('waste/arrayWaste.php');
-var_dump($arrayWaste);
+//var_dump($arrayWaste);
 
 // ligne destinée à compter combien on à d'incinérateur, de composteur et de recyclage plastic pour instancier un objet à chaque unité de traitement
 // si une unité de compostage est créer, le programme en tiendra compte automatiquement.
@@ -94,7 +94,7 @@ foreach($data['services'] as $value)
         if($value['type'] === 'centreTri')
         {
             $sortingCenter = new sortingCenterClass($value['type'], $value['capacite']);
-            echo $sortingCenter->getType()." => ".$sortingCenter->getCapacite().PHP_EOL;
+            //echo $sortingCenter->getType()." => ".$sortingCenter->getCapacite().PHP_EOL;
         }
 
     }
@@ -105,7 +105,7 @@ foreach($data['services'] as $value)
         if($value['type'] === 'recyclagePapier')
         {
             $recyclingPaper = new recyclingPaperClass($value['type'], $value['capacite']);
-            echo $recyclingPaper->getType()." => ".$recyclingPaper->getCapacite().PHP_EOL;
+            //echo $recyclingPaper->getType()." => ".$recyclingPaper->getCapacite().PHP_EOL;
         }
     }
 
@@ -115,7 +115,7 @@ foreach($data['services'] as $value)
         if($value['type'] === 'recyclageMetaux')
         {
             $recyclingMetals = new recyclingMetalsClass($value['type'], $value['capacite']);
-            echo $recyclingMetals->getType()." => ".$recyclingMetals->getCapacite().PHP_EOL;
+            //echo $recyclingMetals->getType()." => ".$recyclingMetals->getCapacite().PHP_EOL;
         }
     }
 
@@ -125,7 +125,7 @@ foreach($data['services'] as $value)
         if($value['type'] === 'recyclageVerre')
         {
             $recyclingGlass = new recyclingGlassClass($value['type'], $value['capacite']);
-            echo $recyclingGlass->getType()." => ".$recyclingGlass->getCapacite().PHP_EOL;
+            //echo "Filiaire de recyclage du verre => ".$recyclingGlass->getCapacite()." Tonnes<br>".PHP_EOL; //$recyclingGlass->getType()
         }
     }
 
@@ -136,7 +136,7 @@ foreach($data['services'] as $value)
         {
             $nbIncinerateur++;
             $incinerator = new incineratorClass($value['type'], $value['ligneFour'], $value['capaciteLigne']);
-            echo $incinerator->getType()."-".$nbIncinerateur." => ".$incinerator->getCapacite().PHP_EOL;
+            //echo $incinerator->getType()."-".$nbIncinerateur." => ".$incinerator->getCapacite().PHP_EOL;
         }
     }
 
@@ -147,7 +147,7 @@ foreach($data['services'] as $value)
         {
             $nbComposteur++;
             $composter = new composterClass($value['type'], $value['capacite'], $value['foyers']);
-            echo $composter->getType()."-".$nbComposteur."(".$composter->getFoyers().") => ".$composter->getCapacite().PHP_EOL;
+            //echo $composter->getType()."-".$nbComposteur."(".$composter->getFoyers().") => ".$composter->getCapacite().PHP_EOL;
         }
     }
 
@@ -158,7 +158,7 @@ foreach($data['services'] as $value)
         {
             $nbRecyclingPlastic++;
             $recyclingPlastic = new recyclingPlasticClass($value['type'], $value['capacite'], $value['plastiques']);
-            echo $recyclingPlastic->getType()."-".$nbRecyclingPlastic."(".implode(', ',$recyclingPlastic->getPlastic()).") => ".$recyclingPlastic->getCapacite().PHP_EOL;
+            //echo $recyclingPlastic->getType()."-".$nbRecyclingPlastic."(".implode(', ',$recyclingPlastic->getPlastic()).") => ".$recyclingPlastic->getCapacite().PHP_EOL;
         }
     }
 }
@@ -168,25 +168,71 @@ $totalGlass = 0;
 
 foreach($data['quartiers'] as $key => $value)
 {
-    // glass
-    
     foreach($value as $waste => $weight)
     {
-        if (in_array('verre', $arrayWaste) && !isset($glassIncineration[$key]))
+        // glass
+        if (in_array('verre', $arrayWaste) && !isset($glassRecyclage[$key]))
         {
-            
             if($waste === 'verre')
             {
-                $co2Verreincineration = $co2['verre']['incineration'];
-                $glassIncineration[$key] = new glassIncinerationClass('Verre', $weight, $co2Verreincineration, $value['population'], $key);
-              
-                echo PHP_EOL.$glassIncineration[$key]->getName()." => ".$glassIncineration[$key]->getWeight()." tonnes, ".$glassIncineration[$key]->getCo2()." g/tonne de dechets incineres (Quartier ".$glassIncineration[$key]->getDistrict()."->".$glassIncineration[$key]->getpopulation()." habitants)".PHP_EOL;
-              
+                if(array_key_exists('recyclage', $co2['verre']))
+                {
+                    $co2ClassRecyclage = $co2['verre']['recyclage'];
+                    $glassRecyclage[$key] = new glassRecyclingClass('Verre', $weight, $co2ClassRecyclage, $value['population'], $key);
+
+                    //echo PHP_EOL.$glassRecyclage[$key]->getName()." => ".$glassRecyclage[$key]->getWeight()." tonnes, ".$glassRecyclage[$key]->getCo2()." g/tonne de dechets recyclés (Quartier ".$glassRecyclage[$key]->getDistrict()."->".$glassRecyclage[$key]->getpopulation()." habitants)".PHP_EOL;
+                  
+                    // le verre recyclé produit X gramme de CO2 par tonnes
+                    $glassRecycleCo2 = $glassRecyclage[$key]->getCo2();
+                }
+                if(array_key_exists('incineration', $co2['verre']))
+                {
+                    $co2ClassIncineration = $co2['verre']['incineration'];
+                    $glassIncineration[$key] = new glassIncinerationClass('Verre', $weight, $co2ClassIncineration, $value['population'], $key);
+
+                    //echo PHP_EOL.$glassIncineration[$key]->getName()." => ".$glassIncineration[$key]->getWeight()." tonnes, ".$glassIncineration[$key]->getCo2()." g/tonne de dechets incinérés (Quartier ".$glassIncineration[$key]->getDistrict()."->".$glassIncineration[$key]->getpopulation()." habitants)".PHP_EOL;
+                  
+                    // le verre incinéré produit X gramme de CO2 par tonnes
+                    $glassIncinereCo2 = $glassIncineration[$key]->getCo2();
+                }
+                
+                // poids total de Verre à traiter
                 $totalGlass += $weight;
             }
-            
         }
     }
-    
 }
-echo "Quantite total de verre a traiter : ".$totalGlass." Tonnes".PHP_EOL;
+// verifier si le centre de tri peut traiter la totalité du verre
+echo "Quantite total de verre a traiter : ".$totalGlass." Tonnes<br>".PHP_EOL;
+
+if ($sortingCenter->getCapacite() > $totalGlass)
+{
+    
+    echo "Le centre de tri d'une capacité de ".$sortingCenter->getCapacite()." tonnes peut traiter la totalité du Verre.".PHP_EOL;
+
+    // c'est bien mais est ce que le centre de recyclage du verre peut traiter la totalité du verre
+    if ($recyclingGlass->getCapacite() > $totalGlass)
+    {
+        echo "la filiaire de recyclage du Verre peut traiter tout le verre.".PHP_EOL;
+        // quantité de CO2 rejeté par le recyclage du verre
+        echo "Le recyclage du verre a produit ".$recyclingGlass->recyclingTreatment($glassRecycleCo2, $totalGlass)." grammes de CO2.<br>".PHP_EOL;
+    }
+    else
+    {
+        //je recupere ce qu'il reste à traiter que j'envoie à l'incinerateur
+        $resteVerre = $totalGlass - $recyclingGlass->getCapacite();
+        echo "Mais la filiaire de traitement du verre d'une capacité de ".$recyclingGlass->getCapacite()." tonnes ne peut pas.<br> ".$resteVerre." tonnes de verre vont directement être envoyés à l'incinérateur.<br>".PHP_EOL;
+        
+        // quantité de CO2 rejeté par le recyclage du verre
+        $glassRecycled = $totalGlass - $resteVerre;
+        echo "Le recyclage de ".$glassRecycled." tonnes de verre a produit ".$recyclingGlass->recyclingTreatment($glassRecycleCo2, $glassRecycled)." grammes de CO2.<br>".PHP_EOL;
+      
+        echo "L'incinération de ".$resteVerre." de verre a produit ".$incinerator->incineratorTreatment($glassIncinereCo2, $resteVerre)." grammes de CO2.<br>".PHP_EOL;
+        
+    }
+}
+else{
+    $resteVerre = $totalGalss - $sortingCenter->getCapacite();
+    echo "Le centre de tri ne peut traiter que ".$sortingCenter->getCapacite()." tonnes de verre. Le reste (".$resteVerre." tonnes) va être incinéré".PHP_EOL;
+}
+
