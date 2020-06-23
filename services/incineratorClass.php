@@ -21,8 +21,8 @@ class incineratorClass extends servicesAbstractClass
         return $this->capaciteLigne * $this->ligneFour;
     }
   
-    public function incineratorTreatment()
+    public function incineratorTreatment($co2, $weight)
     {
-      
+        return $co2*$weight;
     }
 }

@@ -2,10 +2,8 @@
 
 namespace App\services;
 
-//use App\treatment\recyclingInterface;
 
-
-class recyclingGlassClass extends servicesAbstractClass  //implements recyclingInterface
+class recyclingGlassClass extends servicesAbstractClass
 {
     protected int $capacite;
     protected string $type;
@@ -21,14 +19,8 @@ class recyclingGlassClass extends servicesAbstractClass  //implements recyclingI
         return $this->capacite;
     }
   
-    /*public function recyclingTraitement(recyclingInterface $weight)
+    public function recyclingTreatment($co2, $weight)
     {
-        if ($this->capacite > $weight){
-            return true;
-        }
-        else {
-            $reste = $weight - $this->capacite;
-            
-        }
-    }*/
+        return $co2*$weight;
+    }
 }
