@@ -33,6 +33,10 @@ if ($sortingCenter->getCapacite() >= $totalGlass)
         //array_push($co2RejeteRecycle, $recyclingGlass->recyclingTreatment($glassRecycleCo2, $glassRecycled));
         $co2GlassTotal += $recyclingGlass->recyclingTreatment($glassRecycleCo2, $glassRecycled);
       
+        $sortingCenter->setInQuartier('un', 'verre', $glassRecycled, $recyclingGlass->recyclingTreatment($glassRecycleCo2, $glassRecycled));
+      
+        print_r($quartier);
+      
         // quantité de CO2 rejeter par l'incineration du verre
         // il y a plusieurs incinerateurs
         foreach ($arrayIncinerator as $i => $v)

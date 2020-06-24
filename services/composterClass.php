@@ -9,7 +9,7 @@ class composterClass extends servicesAbstractClass
     protected int $capacite;
     protected string $type;
 
-    public function __construct(string $type, int $capacite, int $foyers)
+    public function __construct(string $type,int $capacite, int $foyers) // 
     {
         $this->capacite = $capacite;
         $this->type = $type;
@@ -18,7 +18,7 @@ class composterClass extends servicesAbstractClass
 
     public function getCapacite()
     {
-        return $this->capacite * $this->foyers;
+        return $this->capacite; // * $this->foyers;
     }
 
     public function getFoyers()

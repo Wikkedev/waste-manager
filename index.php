@@ -81,24 +81,68 @@ include_once('waste/arrayWaste.php');
 // si une unité de compostage est créer, le programme en tiendra compte automatiquement.
 $nbServices = array_count_values($arrayServices);
 
-$nbIncinerateur = 0;
-$nbComposter = 0;
-$nbRecyclingPlastic = 0;
+// tableau pour enregistrer le poids des dechets recyclés, compostés ou incinérés ainsi que le CO2 rejeté par quartier
+$quartier = array();
+/*
+$i(array) => recyclage(array)
+                plastiques(array)
+                    PET(array)    => Weight(int)
+                                  => Co2(int)
+                    PVC(array)    => Weight(int)
+                                  => Co2(int)
+                    ......
+                                  
+                verre(array)  => Weight(int)
+                              => Co2(int)
+                
+                ........
+                                        
+          => Compostage(array)
+                  organic(array)  => Weight(int)
+                                  => Co2(int)
+                                  
+          => Incineration (array)
+                plastiques(array)
+                    PET(array)    => Weight(int)
+                                  => Co2(int)
+                    PVC(array)    => Weight(int)
+                                  => Co2(int)
+                    ......
+                                  
+                verre(array)  => Weight(int)
+                              => Co2(int)
+                
+                ........
+               
+*/
 
-// tableau pour recuperer les capacité ds 3 incinerateurs
-$arrayIncinerator = array();
-
-// tableau pour recuperer les capacité ds 9 composteurs
-$arrayComposter = array();
+if (in_array('incinerateur', $arrayServices))
+{
+    $nbIncinerateur = 0;
+    // tableau pour recuperer les capacité ds 3 incinerateurs
+    $arrayIncinerator = array();
+  
+    // tableau pour recuperer le CO2 rejeté par incineration
+    $co2RejeteIncinere = array();
+}
+if (in_array('recyclagePlastique', $arrayServices))
+{
+    $nbRecyclingPlastic = 0;
+}
+if (in_array('composteur', $arrayServices))
+{
+    // tableau pour recuperer les capacité ds 9 composteurs
+    $arrayComposter = array();
+  
+    // tableau pour recuperer le CO2 rejeté par compostage
+    $co2RejeteCompost = array();
+}
 
 // tableau pour recuperer le CO2 rejeté par recyclage
 $co2RejeteRecycle = array();
 
-// tableau pour recuperer le CO2 rejeté par incineration
-$co2RejeteIncinere = array();
 
-// tableau pour recuperer le CO2 rejeté par compostage
-$co2RejeteCompost = array();
+
 
 // verifie si le service est dans le tableau avant d'instancier les services et je recupere sa capacité de data.json
 foreach($data['services'] as $value)
@@ -145,27 +189,28 @@ foreach($data['services'] as $value)
     }
 
     // incinerateur
-    if (in_array('incinerateur', $arrayServices) && $nbIncinerateur <= $nbServices['incinerateur'])
+    if (in_array('incinerateur', $arrayServices))
     {
-        
-        if($value['type'] === 'incinerateur')
+        if ($nbIncinerateur <= $nbServices['incinerateur'])
         {
-            $nbIncinerateur++;
-            $incinerator[$nbIncinerateur] = new incineratorClass($nbIncinerateur, $value['ligneFour'], $value['capaciteLigne']);
-            array_push($arrayIncinerator, $incinerator[$nbIncinerateur]->getCapacite());
-            //echo $incinerator[$nbIncinerateur]->getType()."-".$nbIncinerateur." => ".$incinerator[$nbIncinerateur]->getCapacite().PHP_EOL;
+            if($value['type'] === 'incinerateur')
+            {
+                $nbIncinerateur++;
+                $incinerator[$nbIncinerateur] = new incineratorClass($nbIncinerateur, $value['ligneFour'], $value['capaciteLigne']);
+                array_push($arrayIncinerator, $incinerator[$nbIncinerateur]->getCapacite());
+                //echo $incinerator[$nbIncinerateur]->getType()."-".$nbIncinerateur." => ".$incinerator[$nbIncinerateur]->getCapacite().PHP_EOL;
+            }
         }
     }
 
     // composteur
-    if (in_array('composteur', $arrayServices) && $nbComposter <= $nbServices['composteur'])
+    if (in_array('composteur', $arrayServices))
     {
+        $capaciteComposter = 0;
         if($value['type'] === 'composteur')
         {
-            $nbComposter++;
-            $composter[$nbComposter] = new composterClass($nbComposter, $value['capacite'], $value['foyers']);
-            array_push($arrayComposter, $composter[$nbComposter]->getCapacite());
-            //echo $composter[$nbComposter]->getType()."-".$nbComposter."(".$composter[$nbComposter]->getFoyers().") => ".$composter[$nbComposter]->getCapacite().PHP_EOL;
+            $capaciteComposter += $value['capacite'] * $value['foyers'];
+            $composter = new composterClass($value['type'], $capaciteComposter, $value['foyers']);
         }
     }
 
@@ -182,14 +227,15 @@ foreach($data['services'] as $value)
 }
 
 // verifie si le dechets est dans le tableau avant d'instancier le dechets et je recupere les infos de data.json
-$totalGlass = 0; 
-$totalMetals = 0;
-$totalPaper = 0;
-$totalOther = 0;
-$totalOrganic = 0;
+if (in_array('verre', $arrayWaste)) {$totalGlass = 0;}
+if (in_array('metaux', $arrayWaste)) {$totalMetals = 0;}
+if (in_array('papier', $arrayWaste)) {$totalPaper = 0;}
+if (in_array('autre', $arrayWaste)) {$totalOther = 0;}
+if (in_array('organique', $arrayWaste)) {$totalOrganic = 0;}
 
 foreach($data['quartiers'] as $key => $value)
 {
+    
     foreach($value as $waste => $weight)
     {
         // glass
@@ -199,20 +245,20 @@ foreach($data['quartiers'] as $key => $value)
             {
                 if(array_key_exists('recyclage', $co2['verre']))
                 {
-                    $co2ClassRecyclage = $co2['verre']['recyclage'];
-                    $glassRecyclage[$key] = new glassRecyclingClass('Verre', $weight, $co2ClassRecyclage, $value['population'], $key);
+                    $co2Recycling = $co2['verre']['recyclage'];
+                    $glassRecycling[$key] = new glassRecyclingClass('Verre', $weight, $co2Recycling, $value['population'], $key);
 
-                    //echo PHP_EOL.$glassRecyclage[$key]->getName()." => ".$glassRecyclage[$key]->getWeight()." tonnes, ".$glassRecyclage[$key]->getCo2()." g/tonne de dechets recyclés (Quartier ".$glassRecyclage[$key]->getDistrict()."->".$glassRecyclage[$key]->getpopulation()." habitants)".PHP_EOL;
+                    //echo PHP_EOL.$glassRecycling[$key]->getName()." => ".$glassRecycling[$key]->getWeight()." tonnes, ".$glassRecycling[$key]->getCo2()." g/tonne de dechets recyclés (Quartier ".$glassRecycling[$key]->getDistrict()."->".$glassRecycling[$key]->getpopulation()." habitants)".PHP_EOL;
                   
                     // le verre recyclé produit X gramme de CO2 par tonnes
-                    $glassRecycleCo2 = $glassRecyclage[$key]->getCo2();
+                    $glassRecycleCo2 = $glassRecycling[$key]->getCo2();
                   
                     
                 }
                 if(array_key_exists('incineration', $co2['verre']))
                 {
-                    $co2ClassIncineration = $co2['verre']['incineration'];
-                    $glassIncineration[$key] = new glassIncinerationClass('Verre', $weight, $co2ClassIncineration, $value['population'], $key);
+                    $co2Incineration = $co2['verre']['incineration'];
+                    $glassIncineration[$key] = new glassIncinerationClass('Verre', $weight, $co2Incineration, $value['population'], $key);
 
                     //echo PHP_EOL.$glassIncineration[$key]->getName()." => ".$glassIncineration[$key]->getWeight()." tonnes, ".$glassIncineration[$key]->getCo2()." g/tonne de dechets incinérés (Quartier ".$glassIncineration[$key]->getDistrict()."->".$glassIncineration[$key]->getpopulation()." habitants)".PHP_EOL;
                   
@@ -232,18 +278,18 @@ foreach($data['quartiers'] as $key => $value)
             {
                 if(array_key_exists('recyclage', $co2['metaux']))
                 {
-                    $co2ClassRecyclage = $co2['metaux']['recyclage'];
-                    $metalsRecyclage[$key] = new metalsRecyclingClass('Métaux', $weight, $co2ClassRecyclage, $value['population'], $key);
+                    $co2Recycling = $co2['metaux']['recyclage'];
+                    $metalsRecycling[$key] = new metalsRecyclingClass('Métaux', $weight, $co2Recycling, $value['population'], $key);
 
-                    //echo PHP_EOL.$metalsRecyclage[$key]->getName()." => ".$metalsRecyclage[$key]->getWeight()." tonnes, ".$metalsRecyclage[$key]->getCo2()." g/tonne de dechets recyclés (Quartier ".$metalsRecyclage[$key]->getDistrict()."->".$metalsRecyclage[$key]->getpopulation()." habitants)".PHP_EOL;
+                    //echo PHP_EOL.$metalsRecycling[$key]->getName()." => ".$metalsRecycling[$key]->getWeight()." tonnes, ".$metalsRecycling[$key]->getCo2()." g/tonne de dechets recyclés (Quartier ".$metalsRecycling[$key]->getDistrict()."->".$metalsRecycling[$key]->getpopulation()." habitants)".PHP_EOL;
                   
                     // le metaux recyclé produit X gramme de CO2 par tonnes
-                    $metalsRecycleCo2 = $metalsRecyclage[$key]->getCo2();
+                    $metalsRecycleCo2 = $metalsRecycling[$key]->getCo2();
                 }
                 if(array_key_exists('incineration', $co2['metaux']))
                 {
-                    $co2ClassIncineration = $co2['metaux']['incineration'];
-                    $metalsIncineration[$key] = new metalsIncinerationClass('Métaux', $weight, $co2ClassIncineration, $value['population'], $key);
+                    $co2Incineration = $co2['metaux']['incineration'];
+                    $metalsIncineration[$key] = new metalsIncinerationClass('Métaux', $weight, $co2Incineration, $value['population'], $key);
 
                     //echo PHP_EOL.$metalsIncineration[$key]->getName()." => ".$metalsIncineration[$key]->getWeight()." tonnes, ".$metalsIncineration[$key]->getCo2()." g/tonne de dechets incinérés (Quartier ".$metalsIncineration[$key]->getDistrict()."->".$metalsIncineration[$key]->getpopulation()." habitants)".PHP_EOL;
                   
@@ -263,18 +309,18 @@ foreach($data['quartiers'] as $key => $value)
             {
                 if(array_key_exists('recyclage', $co2['papier']))
                 {
-                    $co2ClassRecyclage = $co2['papier']['recyclage'];
-                    $paperRecyclage[$key] = new paperRecyclingClass('Papier', $weight, $co2ClassRecyclage, $value['population'], $key);
+                    $co2Recycling = $co2['papier']['recyclage'];
+                    $paperRecycling[$key] = new paperRecyclingClass('Papier', $weight, $co2Recycling, $value['population'], $key);
 
-                    //echo PHP_EOL.$paperRecyclage[$key]->getName()." => ".$paperRecyclage[$key]->getWeight()." tonnes, ".$paperRecyclage[$key]->getCo2()." g/tonne de dechets recyclés (Quartier ".$paperRecyclage[$key]->getDistrict()."->".$paperRecyclage[$key]->getpopulation()." habitants)".PHP_EOL;
+                    //echo PHP_EOL.$paperRecycling[$key]->getName()." => ".$paperRecycling[$key]->getWeight()." tonnes, ".$paperRecycling[$key]->getCo2()." g/tonne de dechets recyclés (Quartier ".$paperRecycling[$key]->getDistrict()."->".$paperRecycling[$key]->getpopulation()." habitants)".PHP_EOL;
                   
                     // le papier recyclé produit X gramme de CO2 par tonnes
-                    $paperRecycleCo2 = $paperRecyclage[$key]->getCo2();
+                    $paperRecycleCo2 = $paperRecycling[$key]->getCo2();
                 }
                 if(array_key_exists('incineration', $co2['papier']))
                 {
-                    $co2ClassIncineration = $co2['papier']['incineration'];
-                    $paperIncineration[$key] = new paperIncinerationClass('Papier', $weight, $co2ClassIncineration, $value['population'], $key);
+                    $co2Incineration = $co2['papier']['incineration'];
+                    $paperIncineration[$key] = new paperIncinerationClass('Papier', $weight, $co2Incineration, $value['population'], $key);
 
                     //echo PHP_EOL.$paperIncineration[$key]->getName()." => ".$paperIncineration[$key]->getWeight()." tonnes, ".$paperIncineration[$key]->getCo2()." g/tonne de dechets incinérés (Quartier ".$paperIncineration[$key]->getDistrict()."->".$paperIncineration[$key]->getpopulation()." habitants)".PHP_EOL;
                   
@@ -287,14 +333,15 @@ foreach($data['quartiers'] as $key => $value)
             }
         }
       
+        //autre
         if (in_array('autre', $arrayWaste) && !isset($otherIncineration[$key]))
         {
             if($waste === 'autre')
             {
                 if(array_key_exists('incineration', $co2['autre']))
                 {
-                    $co2ClassIncineration = $co2['autre']['incineration'];
-                    $otherIncineration[$key] = new otherIncinerationClass('Déchets divers (autre)', $weight, $co2ClassIncineration, $value['population'], $key);
+                    $co2Incineration = $co2['autre']['incineration'];
+                    $otherIncineration[$key] = new otherIncinerationClass('Déchets divers (autre)', $weight, $co2Incineration, $value['population'], $key);
 
                     //echo PHP_EOL.$otherIncineration[$key]->getName()." => ".$otherIncineration[$key]->getWeight()." tonnes, ".$otherIncineration[$key]->getCo2()." g/tonne de dechets incinérés (Quartier ".$otherIncineration[$key]->getDistrict()."->".$otherIncineration[$key]->getpopulation()." habitants)".PHP_EOL;
                   
@@ -314,20 +361,21 @@ foreach($data['quartiers'] as $key => $value)
             {
                 if(array_key_exists('compostage', $co2['organique']))
                 {
-                    $co2ClassComposting = $co2['organique']['compostage'];
-                    $organicComposting[$key] = new organicCompostingClass('Dechets organiques', $weight, $co2ClassComposting, $value['population'], $key);
+                    // dechet organique compostés
+                    $co2Composting = $co2['organique']['compostage'];
+                    $organicComposting[$key] = new organicCompostingClass('Dechets organiques', $weight, $co2Composting, $value['population'], $key);
 
                     //echo PHP_EOL.$organicComposting[$key]->getName()." => ".$organicComposting[$key]->getWeight()." tonnes, ".$organicComposting[$key]->getCo2()." g/tonne de dechets recyclés (Quartier ".$organicComposting[$key]->getDistrict()."->".$organicComposting[$key]->getpopulation()." habitants)".PHP_EOL;
                   
                     // le dechet organique recyclé produit X gramme de CO2 par tonnes
                     $organicCompostCo2 = $organicComposting[$key]->getCo2();
-                  
                     
                 }
+              
                 if(array_key_exists('incineration', $co2['organique']))
                 {
-                    $co2ClassIncineration = $co2['organique']['incineration'];
-                    $organicIncineration[$key] = new organicIncinerationClass('Dechets organiques', $weight, $co2ClassIncineration, $value['population'], $key);
+                    $co2Incineration = $co2['organique']['incineration'];
+                    $organicIncineration[$key] = new organicIncinerationClass('Dechets organiques', $weight, $co2Incineration, $value['population'], $key);
 
                     //echo PHP_EOL.$organicIncineration[$key]->getName()." => ".$organicIncineration[$key]->getWeight()." tonnes, ".$organicIncineration[$key]->getCo2()." g/tonne de dechets incinérés (Quartier ".$organicIncineration[$key]->getDistrict()."->".$organicIncineration[$key]->getpopulation()." habitants)".PHP_EOL;
                   
@@ -342,7 +390,7 @@ foreach($data['quartiers'] as $key => $value)
     }
 }
 
-//Ajout des fichier necessaire et alerte en cas de nouveau dechets
+//Ajout des fichier necessaire et alerte en cas de nouveaux dechets
 foreach($arrayWaste as $value)
 {
     if (!file_exists('modele/'.$value.'.php'))

@@ -15,4 +15,6 @@ abstract class servicesAbstractClass
     {
         return $this->type;
     }
+  
+    
 }
