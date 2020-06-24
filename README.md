@@ -121,3 +121,7 @@ problemes reglés sur organique.php
 Le MVC n'est pas respecté mais je le sais.
 Le tableau recapitulatif est en cours.
 
+Je voulais faire ressortir quelle quantité de CO2 avez été rejeté par quartier mais je n'y arrive pas. J'ai traité les dechets dans leur globalité.
+Je dois repenser le prorcessus de traitement pour ressortir une valeur par quartier. Du coup, j'ai pas beaucoup avancé. 
+Ce que j'affiche tout de suite est juste mais pas détaillé.
+
