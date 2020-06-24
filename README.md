@@ -115,3 +115,9 @@ Je vais faire un tableau recapitulatif du CO2 produit par recyclage, compostage 
 
 J'ai une question sur les methodes de treatment (incineratorTreatment, recyclingTreatment et compostingTreatment) que je suis obligé de les mmettre dans les class waste et les class services. Si je ne fais pas ça, php retourne une erreur.
 
+--------------------------------------------------------------------------
+Mercredi 24/06
+problemes reglés sur organique.php
+Le MVC n'est pas respecté mais je le sais.
+Le tableau recapitulatif est en cours.
+
