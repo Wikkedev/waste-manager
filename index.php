@@ -1,4 +1,22 @@
-<?php
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Résultat du traitement des dechets par Quartier</title>
+<!-- CSS only -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+</head>
+
+<body>
+<h1>Résultat du traitement des dechets par Quartier</h1>
+  
+  <?php
+function debug($variable){
+        $debug = debug_backtrace();
+        echo '<pre><strong>fichier :</strong> ' . $debug[0]['file'] . ' <br><strong>ligne :</strong>  ' . $debug[0]['line'] .'</pre>';
+        echo '<pre>' . print_r($variable, true) . '</pre>';
+    }
 /*
 créer un programme qui acceptera en entrée un fichier json contenant les déchets ainsi que les services de traitement des déchets disponibles, 
 et afficher le résultat de la répartition des déchets 
@@ -6,7 +24,7 @@ ainsi que le CO2 rejetté (par chaque service de traitement et au global).
 L'idéal est de favoriser les traitement adaptés et de ne se replier sur les autres méthodes de traitement que lorsque les capacités maximales d'un services sont atteintes.
 */
 
-$file = "data.json";
+$file = "data2.json";
 $data = json_decode(file_get_contents($file), TRUE);
 //var_dump($data);
 
@@ -15,6 +33,7 @@ $co2= json_decode(file_get_contents($file), TRUE);
 //var_dump($co2);
 
 require 'autoload.php';
+
 
 use App\waste\glassIncinerationClass;
 use App\waste\glassRecyclingClass;
@@ -119,7 +138,7 @@ $i(array) => recyclage(array)
 if (in_array('incinerateur', $arrayServices))
 {
     $nbIncinerateur = 0;
-    // tableau pour recuperer les capacité ds 3 incinerateurs
+    // tableau pour recuperer les capacités ds 3 incinerateurs
     $arrayIncinerator = array();
   
     // tableau pour recuperer le CO2 rejeté par incineration
@@ -131,7 +150,7 @@ if (in_array('recyclagePlastique', $arrayServices))
 }
 if (in_array('composteur', $arrayServices))
 {
-    // tableau pour recuperer les capacité ds 9 composteurs
+    // tableau pour recuperer les capacités ds 9 composteurs
     $arrayComposter = array();
   
     // tableau pour recuperer le CO2 rejeté par compostage
@@ -140,7 +159,6 @@ if (in_array('composteur', $arrayServices))
 
 // tableau pour recuperer le CO2 rejeté par recyclage
 $co2RejeteRecycle = array();
-
 
 
 
@@ -226,21 +244,15 @@ foreach($data['services'] as $value)
     }
 }
 
-// verifie si le dechets est dans le tableau avant d'instancier le dechets et je recupere les infos de data.json
-if (in_array('verre', $arrayWaste)) {$totalGlass = 0;}
-if (in_array('metaux', $arrayWaste)) {$totalMetals = 0;}
-if (in_array('papier', $arrayWaste)) {$totalPaper = 0;}
-if (in_array('autre', $arrayWaste)) {$totalOther = 0;}
-if (in_array('organique', $arrayWaste)) {$totalOrganic = 0;}
 
 foreach($data['quartiers'] as $key => $value)
 {
-    
     foreach($value as $waste => $weight)
     {
         // glass
         if (in_array('verre', $arrayWaste) && !isset($glassIncineration[$key]))
         {
+            $totalGlass[$key] = 0;
             if($waste === 'verre')
             {
                 if(array_key_exists('recyclage', $co2['verre']))
@@ -252,8 +264,8 @@ foreach($data['quartiers'] as $key => $value)
                   
                     // le verre recyclé produit X gramme de CO2 par tonnes
                     $glassRecycleCo2 = $glassRecycling[$key]->getCo2();
-                  
-                    
+                    $population[$key] = $glassRecycling[$key]->getPopulation();
+                     
                 }
                 if(array_key_exists('incineration', $co2['verre']))
                 {
@@ -264,16 +276,21 @@ foreach($data['quartiers'] as $key => $value)
                   
                     // le verre incinéré produit X gramme de CO2 par tonnes
                     $glassIncinereCo2 = $glassIncineration[$key]->getCo2();
+                    $population[$key] = $glassIncineration[$key]->getPopulation();
                 }
                 
                 // poids total de Verre à traiter
-                $totalGlass += $weight;
+                $totalGlass[$key] += $weight;
+                               
+                //var_dump($totalGlass);
+
             }
         }
       
         //Metals
         if (in_array('metaux', $arrayWaste) && !isset($metalsIncineration[$key]))
         {
+            $totalMetals[$key] = 0;
             if($waste === 'metaux')
             {
                 if(array_key_exists('recyclage', $co2['metaux']))
@@ -285,6 +302,7 @@ foreach($data['quartiers'] as $key => $value)
                   
                     // le metaux recyclé produit X gramme de CO2 par tonnes
                     $metalsRecycleCo2 = $metalsRecycling[$key]->getCo2();
+                    $population[$key] = $metalsRecycling[$key]->getpopulation();
                 }
                 if(array_key_exists('incineration', $co2['metaux']))
                 {
@@ -295,16 +313,18 @@ foreach($data['quartiers'] as $key => $value)
                   
                     // le metaux incinéré produit X gramme de CO2 par tonnes
                     $metalsIncinereCo2 = $metalsIncineration[$key]->getCo2();
+                    $population[$key] = $metalsIncineration[$key]->getpopulation();
                 }
                 
                 // poids total de metaux à traiter
-                $totalMetals += $weight;
+                $totalMetals[$key] += $weight;
             }
         }
       
         //Paper
         if (in_array('papier', $arrayWaste) && !isset($paperIncineration[$key]))
         {
+            $totalPaper[$key] = 0;
             if($waste === 'papier')
             {
                 if(array_key_exists('recyclage', $co2['papier']))
@@ -316,6 +336,7 @@ foreach($data['quartiers'] as $key => $value)
                   
                     // le papier recyclé produit X gramme de CO2 par tonnes
                     $paperRecycleCo2 = $paperRecycling[$key]->getCo2();
+                    $population[$key] = $paperRecycling[$key]->getPopulation();
                 }
                 if(array_key_exists('incineration', $co2['papier']))
                 {
@@ -326,16 +347,18 @@ foreach($data['quartiers'] as $key => $value)
                   
                     // le papier incinéré produit X gramme de CO2 par tonnes
                     $paperIncinereCo2 = $paperIncineration[$key]->getCo2();
+                    $population[$key] = $paperIncineration[$key]->getPopulation();
                 }
                 
                 // poids total de papier à traiter
-                $totalPaper += $weight;
+                $totalPaper[$key] += $weight;
             }
         }
       
         //autre
         if (in_array('autre', $arrayWaste) && !isset($otherIncineration[$key]))
         {
+            $totalOther[$key] = 0;
             if($waste === 'autre')
             {
                 if(array_key_exists('incineration', $co2['autre']))
@@ -347,16 +370,18 @@ foreach($data['quartiers'] as $key => $value)
                   
                     // le papier incinéré produit X gramme de CO2 par tonnes
                     $otherIncinereCo2 = $otherIncineration[$key]->getCo2();
+                    $population[$key] = $otherIncineration[$key]->getPopulation();
                 }
-                
+                                                             
                 // poids total de papier à traiter
-                $totalOther += $weight;
+                $totalOther[$key] += $weight;
             }
         }
       
         // organic
         if (in_array('organique', $arrayWaste) && !isset($organicComposting[$key]))
         {
+            $totalOrganic[$key] = 0;
             if($waste === 'organique')
             {
                 if(array_key_exists('compostage', $co2['organique']))
@@ -369,7 +394,7 @@ foreach($data['quartiers'] as $key => $value)
                   
                     // le dechet organique recyclé produit X gramme de CO2 par tonnes
                     $organicCompostCo2 = $organicComposting[$key]->getCo2();
-                    
+                    $population[$key] = $organicComposting[$key]->getPopulation();
                 }
               
                 if(array_key_exists('incineration', $co2['organique']))
@@ -381,13 +406,16 @@ foreach($data['quartiers'] as $key => $value)
                   
                     // le verre incinéré produit X gramme de CO2 par tonnes
                     $organicIncinereCo2 = $organicIncineration[$key]->getCo2();
+                    $population[$key] = $organicIncineration[$key]->getPopulation();
                 }
                 
                 // poids total de Verre à traiter
-                $totalOrganic += $weight;
+                $totalOrganic[$key] += $weight;
             }
         }
     }
+  
+    
 }
 
 //Ajout des fichier necessaire et alerte en cas de nouveaux dechets
@@ -399,8 +427,11 @@ foreach($arrayWaste as $value)
     }
     else
     {
-        include('modele/'.$value.'.php');
+        require_once('modele/'.$value.'.php');
     }
 }
-
-
+include('modele/recap.php');
+//debug($quartier);
+  ?>
+  </body>
+</html>
