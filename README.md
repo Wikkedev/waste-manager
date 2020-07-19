@@ -125,3 +125,9 @@ Je voulais faire ressortir quelle quantité de CO2 avez été rejeté par quarti
 Je dois repenser le prorcessus de traitement pour ressortir une valeur par quartier. Du coup, j'ai pas beaucoup avancé. 
 Ce que j'affiche tout de suite est juste mais pas détaillé.
 
+--------------------------------------------------------------------------
+
+Depuis ... -> jusqu'à maintenant (19/07)
+J'ai revus ma copie, j'affiche les informations sous forme de tableau, bien qu'il reste du texte. 
+L'incinération est fonctionnel pour les dechets "autres" et je veux en faire une class adaptable à tous les dechets incinérables.
+J'ai aussi fait une exportation des résultats au format JSON
